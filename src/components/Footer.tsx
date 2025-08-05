@@ -105,13 +105,13 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 mt-0.5 text-primary-foreground/80" />
                 <div className="text-sm text-primary-foreground/80">
-                  <p>123 Tech Street</p>
-                  <p>Service City, SC 12345</p>
+                  <p>123 Corner Plaza</p>
+                  <p>Loitokitok, LTK 45213</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary-foreground/80" />
-                <span className="text-sm text-primary-foreground/80">+1 (555) 123-4567</span>
+                <span className="text-sm text-primary-foreground/80">+254 (769) 713 991</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary-foreground/80" />
@@ -131,7 +131,7 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-primary-foreground/80">
-              © 2024 SmartFix Solutions. All rights reserved.
+              © 2025 SmartFix Solutions. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link to="/privacy" className="text-sm text-primary-foreground/80 hover:text-white transition-colors">

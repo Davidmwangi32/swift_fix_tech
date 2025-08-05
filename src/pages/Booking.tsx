@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar, Clock, Upload, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { bookingService, type BookingData } from "@/Services/bookingService";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -15,15 +16,38 @@ const Booking = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const ticket = "SF" + Math.random().toString(36).substr(2, 9).toUpperCase();
-    setTicketNumber(ticket);
-    setIsSubmitted(true);
-    toast({
-      title: "Booking Submitted Successfully!",
-      description: `Your ticket number is ${ticket}. We'll contact you within 2 hours.`,
-    });
+    
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const bookingData: BookingData = {
+        fullName: formData.get('fullName') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
+        location: formData.get('address') as string,
+        serviceCategory: formData.get('serviceCategory') as string,
+        problemDescription: formData.get('description') as string,
+        preferredDate: formData.get('preferredDate') as string,
+        preferredTime: formData.get('preferredTime') as string,
+      };
+
+      const response = await bookingService.createBooking(bookingData);
+      setTicketNumber(response.ticketNumber);
+      setIsSubmitted(true);
+      
+      toast({
+        title: "Booking Submitted Successfully!",
+        description: `Your ticket number is ${response.ticketNumber}. We'll contact you within 2 hours.`,
+      });
+    } catch (error) {
+      console.error('Booking submission error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit booking. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (isSubmitted) {
@@ -103,21 +127,22 @@ const Booking = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <Label htmlFor="fullName">Full Name *</Label>
-                            <Input id="fullName" required placeholder="John Smith" />
+                            <Input id="fullName" name="fullName" required placeholder="John Smith" />
                           </div>
                           <div>
                             <Label htmlFor="phone">Phone Number *</Label>
-                            <Input id="phone" type="tel" required placeholder="+1 (555) 123-4567" />
+                            <Input id="phone" name="phone" type="tel" required placeholder="+1 (555) 123-4567" />
                           </div>
                         </div>
                         <div>
                           <Label htmlFor="email">Email Address *</Label>
-                          <Input id="email" type="email" required placeholder="john@example.com" />
+                          <Input id="email" name="email" type="email" required placeholder="john@example.com" />
                         </div>
                         <div>
                           <Label htmlFor="address">Service Address *</Label>
-                          <Textarea 
+                           <Textarea 
                             id="address" 
+                            name="address"
                             required 
                             placeholder="123 Main Street, City, State, ZIP Code"
                             rows={2}
@@ -130,7 +155,7 @@ const Booking = () => {
                         <h3 className="text-lg font-semibold">Service Details</h3>
                         <div>
                           <Label htmlFor="serviceCategory">Service Category *</Label>
-                          <Select required>
+                           <Select name="serviceCategory" required>
                             <SelectTrigger>
                               <SelectValue placeholder="Select service category" />
                             </SelectTrigger>
@@ -159,8 +184,9 @@ const Booking = () => {
                         </div>
                         <div>
                           <Label htmlFor="description">Problem Description *</Label>
-                          <Textarea 
+                           <Textarea 
                             id="description" 
+                            name="description"
                             required 
                             placeholder="Please describe the issue or service needed in detail..."
                             rows={4}
@@ -174,11 +200,11 @@ const Booking = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <Label htmlFor="preferredDate">Preferred Date</Label>
-                            <Input id="preferredDate" type="date" />
+                            <Input id="preferredDate" name="preferredDate" type="date" />
                           </div>
                           <div>
                             <Label htmlFor="preferredTime">Preferred Time</Label>
-                            <Select>
+                             <Select name="preferredTime">
                               <SelectTrigger>
                                 <SelectValue placeholder="Select time slot" />
                               </SelectTrigger>
@@ -262,7 +288,7 @@ const Booking = () => {
                       For immediate emergency assistance, call us directly:
                     </p>
                     <Button variant="destructive" size="lg" className="w-full">
-                      Call (555) 123-4567
+                      Call +254 (769) 713 991
                     </Button>
                   </CardContent>
                 </Card>

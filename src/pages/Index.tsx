@@ -119,7 +119,7 @@ const Index = () => {
               </Button>
               <Button variant="outline" size="xl" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
                 <Phone className="mr-2 h-5 w-5" />
-                Call (555) 123-4567
+                Call +254 (769) 713 991
               </Button>
             </div>
           </div>
